@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
@@ -359,7 +359,13 @@ namespace FullSerializer {
             }
             SkipSpace();
 
-            var result = new Dictionary<string, fsData>();
+#if UNITY_METRO
+            var result = new Dictionary<string, fsData>(
+                fsConfig.IsCaseSensitive ? StringComparer.CurrentCulture : StringComparer.CurrentCultureIgnoreCase);
+#else
+            var result = new Dictionary<string, fsData>(
+                fsConfig.IsCaseSensitive ? StringComparer.InvariantCulture : StringComparer.InvariantCultureIgnoreCase);
+#endif
 
             while (HasValue() && Character() != '}') {
                 fsResult failure;
